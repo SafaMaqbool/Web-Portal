@@ -15,9 +15,13 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { createUser } from "@/actions/createUser"
+import { useRouter } from "next/navigation"
 
 
 export default function userform() {
+
+  const router = useRouter();
     // 1. Define your form.
     const form = useForm<z.infer<typeof UserSchema>>({
       resolver: zodResolver(UserSchema),
@@ -33,6 +37,10 @@ export default function userform() {
       // Do something with the form values.
       // ✅ This will be type-safe and validated.
       console.log(values)
+      createUser(values).then(()=>{
+        router.push('\home') 
+      })
+
     }
     return (
       <Form {...form}>

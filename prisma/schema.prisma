@@ -12,3 +12,12 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id    String     @id @default(cuid())
+  name  String
+  semester String
+  description String
+  liked Boolean
+  
+}

@@ -1,7 +1,10 @@
+"use client"
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { FaPlus } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { AiOutlineLike } from "react-icons/ai";
 import {
     Card,
     CardContent,
@@ -10,30 +13,45 @@ import {
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
+import { getUsers } from '@/actions/getUsers';
+import { deleteUser } from '@/actions/deleteUser';
+
+import { useRouter } from 'next/navigation';
+import { AiFillLike } from "react-icons/ai";
+import { updateUser } from '@/actions/updateUser';
   
 
 const HomePage = () => {
-    const userInfo=[
-     {
-        id:'1',
-        name:'safa',
-        semester: 'Semester 8',
-        description: 'I am a computer science student'
-     },
-     {
-        id:'2',
-        name:'savera',
-        semester: 'Semester 8',
-        description: 'I am a computer science student'
-     },
-     {
-        id:'3',
-        name:'seema',
-        semester: 'Semester 8',
-        description: 'I am a computer science student'
-     },
+  const router = useRouter()
+    const [userInfo,setUserInfo] = useState<any>()
 
-    ]
+    useEffect(()=>{
+      getUsers().then((data)=>{
+        setUserInfo(data)
+      })
+      
+    },[userInfo])
+
+    const handleDelete = useCallback((userId: string)=>{
+         deleteUser(userId).then(()=>{
+          router.refresh()
+         })
+         
+    },[])
+
+    const handleLike=useCallback((userId: string)=>{
+      updateUser(userId,true).then(()=>{
+        router.refresh()
+      })
+  },[])
+
+  const handleUnLike=useCallback((userId: string)=>{
+     updateUser(userId,true).then(()=>{
+      router.refresh()
+     })
+  },[])
+
+
   return (
     <>
     <div className='flex justify-between m-2 p-4'>
@@ -49,7 +67,7 @@ const HomePage = () => {
     </div>
 
     <div>
-    {userInfo.map((userInfo)=>{
+    {userInfo?.map((userInfo:any)=>{
             return(
                 <Card key={userInfo.id}>
                 <CardHeader>
@@ -61,6 +79,19 @@ const HomePage = () => {
                   <p>{userInfo.description}</p>
 
                 </CardContent>
+                <CardFooter className='flex justify-between'>
+                {userInfo.liked ? (
+                  <AiFillLike size={25} onClick={() => handleUnLike(userInfo.id)} />
+                ) : (
+                  <AiOutlineLike
+                    size={25}
+                    onClick={() => handleLike(userInfo.id)}
+                  />
+                )}
+
+                  <MdDelete onClick={()=>handleDelete(userInfo.id)}/>
+
+                </CardFooter>
                 
               </Card>
               
