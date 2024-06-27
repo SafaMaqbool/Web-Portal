@@ -33,22 +33,16 @@ const HomePage = () => {
     },[userInfo])
 
     const handleDelete = useCallback((userId: string)=>{
-         deleteUser(userId).then(()=>{
-          router.refresh()
-         })
+         deleteUser(userId)
          
     },[])
 
     const handleLike=useCallback((userId: string)=>{
-      updateUser(userId,true).then(()=>{
-        router.refresh()
-      })
+      updateUser(userId,true)
   },[])
 
   const handleUnLike=useCallback((userId: string)=>{
-     updateUser(userId,true).then(()=>{
-      router.refresh()
-     })
+     updateUser(userId,true)
   },[])
 
 
